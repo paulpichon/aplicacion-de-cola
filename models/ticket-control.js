@@ -84,7 +84,7 @@ class TicketControl {
         //y como no hay escritorio lo podemos dejar como null
         const ticket = new Ticket( this.ultimo, null );
         //insertar el ticket en el arreglo de tickets con .push()
-        this.ticket.push( ticket );
+        this.tickets.push( ticket );
         //esto se podria resumir en una sola linea
         //this.ticket.push( new Ticket( this.ultimo, null ) );
 
