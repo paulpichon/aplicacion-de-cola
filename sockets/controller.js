@@ -1,4 +1,7 @@
-
+//importamos TicketControl
+const TicketControl = require('../models/ticket-control');
+//una instancia de TicketControl
+const ticketControl = new TicketControl();
 
 
 const socketController = (socket) => {
