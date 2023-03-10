@@ -1,6 +1,11 @@
 //referencias HTML
 const lblEscritorio = document.querySelector('h1');
 const btnAtender    = document.querySelector('button');
+//renderizar el ticket a atender
+const lblTicket     = document.querySelector('small');
+//alerta
+const divAlerta     = document.querySelector('.alert');
+
 
 //leer parametros de la URL
 //mandamos como parametro el window.location.search
@@ -19,6 +24,8 @@ if ( !searchParams.has('escritorio') ) {
 const escritorio = searchParams.get('escritorio');
 //mostrar en el html
 lblEscritorio.innerText = escritorio;
+//ocultar alerta
+divAlerta.style.display = 'none';
 
 
 
@@ -45,9 +52,20 @@ socket.on('ultimo-ticket', ( ultimo ) => {
 
 //listener cuando hagan click en el btnCrear
 btnAtender.addEventListener( 'click', () => {
-    //aunque el payload lo mandamos en la funcion socketController del archivo controller en realidad no tiene nada por eso lo ponemos como null en los argumentos del emit
-    /*socket.emit( 'siguiente-ticket', null, ( ticket ) => {
-        lblNuevoTicket.textContent = ticket;
-    });*/
+
+    //atender ticket
+    socket.emit('atender-ticket', { escritorio }, ( {ok, msg, ticket} ) => {
+        
+        //verificar si la respuesta es ok = true
+        if (!ok) {
+            //si ya  no hay mas tickets
+            lblTicket.innerText = `Nadie`;
+            return divAlerta.style.display = '';
+        }
+
+        //mostrar el ticket a ser atendido
+        lblTicket.innerText = `Ticket: ${ ticket.numero }`;
+
+    });
 
 });

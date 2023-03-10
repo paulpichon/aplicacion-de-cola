@@ -19,6 +19,34 @@ const socketController = (socket) => {
 
     });
 
+    //atender ticket
+    socket.on('atender-ticket', ({ escritorio}, callback) => {
+        //validar si viene el escritorio
+        if ( !escritorio ) {
+            return callback({
+                ok: false,
+                msg: 'El escritorio es obligatorio'
+            });
+        }
+
+        //asignar ticket
+        const ticket = ticketControl.atenderTicket( escritorio );
+        //si el ticket no existe
+        if ( !ticket ) {
+            callback({
+                ok: false,
+                msg: 'Ya no hay tickets pendientes'
+            });
+        } else {
+            //si si hay ticker regresamos el callback con el ticket que sera atendido
+            callback({
+                ok: true,
+                ticket
+            });
+        }
+
+    });
+
 }
 
 
