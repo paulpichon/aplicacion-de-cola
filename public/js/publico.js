@@ -15,6 +15,11 @@ const socket = io();
 
 //estado actual de los tickets en pantalla
 socket.on('estado-actual', ( payload ) => {
+    //agregar audio cada que se crea un nuevo ticket
+    const audio = new Audio('./audio/new-ticket.mp3');
+    //reproducir
+    audio.play();
+
     //desestructuracion de arreglo
     const [ ticket1, ticket2, ticket3, ticket4 ] = payload;
     //renderizar
