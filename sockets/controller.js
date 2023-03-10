@@ -5,10 +5,13 @@ const ticketControl = new TicketControl();
 
 
 const socketController = (socket) => {
+    //estos eventos pasan cuando un cliente se conecta
     //ultimo ticket
-    socket.emit('ultimo-ticket', ticketControl.ultimo);
+    socket.emit( 'ultimo-ticket', ticketControl.ultimo);
     //ultimos 4 tickets
-    socket.emit('estado-actual', ticketControl.ultimos4 );
+    socket.emit( 'estado-actual', ticketControl.ultimos4 );
+    //mostrar los ticket en cola
+    socket.emit( 'ticket-pendientes', ticketControl.tickets.length );
 
     socket.on('siguiente-ticket', ( payload, callback ) => {
         
@@ -16,6 +19,8 @@ const socketController = (socket) => {
         const siguiente = ticketControl.siguiente();
         //callback
         callback( siguiente );
+        //actualizar los tickets en cola de cada escritorio
+        socket.broadcast.emit( 'ticket-pendientes', ticketControl.tickets.length );
 
     });
 
@@ -33,6 +38,10 @@ const socketController = (socket) => {
         const ticket = ticketControl.atenderTicket( escritorio );
         //ultimos 4 tickets notificar cambio en los ultimos 4 tickets
         socket.broadcast.emit('estado-actual', ticketControl.ultimos4 );
+        //actualizar los ticket pendientes en cada escritorio
+        //mostrar los ticket en cola
+        socket.emit( 'ticket-pendientes', ticketControl.tickets.length );
+        socket.broadcast.emit( 'ticket-pendientes', ticketControl.tickets.length );
 
         //si el ticket no existe
         if ( !ticket ) {

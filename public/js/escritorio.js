@@ -5,6 +5,8 @@ const btnAtender    = document.querySelector('button');
 const lblTicket     = document.querySelector('small');
 //alerta
 const divAlerta     = document.querySelector('.alert');
+//pendientes
+const lblPendientes     = document.querySelector('#lblPendientes');
 
 
 //leer parametros de la URL
@@ -45,9 +47,17 @@ socket.on('disconnect', () => {
 });
 
 
-//ultimo ticket
-socket.on('ultimo-ticket', ( ultimo ) => {
-    //lblNuevoTicket.textContent = `Ticket: ${ultimo}`;
+//mostrar los ticket en cola
+socket.on('ticket-pendientes', ( pendientes ) => {
+    //verificar si hay tickets
+    if ( pendientes === 0 ) {
+        lblPendientes.style.display = 'none';
+    }else {
+        lblPendientes.style.display = '';
+        //renderizamos
+        lblPendientes.textContent = pendientes;
+    }
+    
 });
 
 //listener cuando hagan click en el btnCrear
